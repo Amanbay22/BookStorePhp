@@ -49,7 +49,9 @@ $result2 = mysqli_query($conn, $sql2);
     </form>
     <ul class="navbar-nav mr-auto">
       <li class="nav-item active">
+         <?php if(!isset($_COOKIE['email'])){ ?>
         <a class="nav-link" href="signup.php">Log In</a>
+      <?php } ?>
       </li>
        <li class="nav-item active">
         <a class="nav-link" href="contact.php">Contact us</a>
@@ -97,23 +99,26 @@ $result2 = mysqli_query($conn, $sql2);
 
 </div>
 <div class="col-md-9 mt-4">
-			<div class="book_list">
-			<div class="row text-center mb-5">
-				<?php if ($result->num_rows > 0) {
+		<div class="book_list">
+      <div class="row text-center mb-5">
+        <?php if ($result->num_rows > 0) {
 
   while($row = $result->fetch_assoc()) {
    
-   ?>			<div class="col-md-3 sm-6 mb-3">
-					<a type="button" data-toggle="modal" data-target="#<?php echo substr($row['title'],0,3)?>">
-					<img src="<?php echo $row["picture_url"]?>" alt="" class="imgShadows" style="height: 230px;"></a>
-					<div class="d-flex justify-content-center price"><p><?php echo $row["price"] ?> KZT</p>
-						<a >
-					<img src="images/basket.png" alt="" style="margin-left: 40px" class="basket"></a></div>
-				</div>
-				<?php }
+   ?>     <div class="col-md-3 sm-6 mb-3">
+          <a type="button" data-toggle="modal" data-target="#<?php echo str_replace(' ', '', substr($row['title'],0,6))?>">
+          <img src="<?php echo $row["picture_url"]?>" alt="" class="imgShadows" style="height: 230px;"></a>
+          <div class="d-flex justify-content-center price"><p><?php echo $row["price"] ?> KZT</p>
+             <form action="cart.php" method="post">
+                  <input type="hidden" name="book_id" value="<?php echo $row['book_id']?>"> 
+                  <button type="submit" class="btn btn-secondary btn-sm" style="margin-left: 33px">CART</button>  
+                  </form>
+                </div>
+        </div>
+        <?php }
 }  ?>
 </div>
-			</div>
+      </div>
 
 		</div>
 		</div>
@@ -125,7 +130,7 @@ $result2 = mysqli_query($conn, $sql2);
  
    ?>
 		<!-- Modal -->
-<div class="modal fade" id="<?php echo substr($row['title'],0,3)?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+<div class="modal fade" id="<?php echo str_replace(' ', '', substr($row['title'],0,6))?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-lg "  role="document">
     <div class="modal-content">
       <div class="modal-header">

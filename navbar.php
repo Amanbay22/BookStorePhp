@@ -1,5 +1,6 @@
+
 <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #000000">
-			<a class="navbar-brand" href="#">
+			<a class="navbar-brand" href="index.php">
     <img src="images/Logo3.png" width="150px" alt="" style="margin-top: -10px;">
   </a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -11,14 +12,18 @@
       <button class="btn btn-outline-light	my-2 my-sm-0" type="submit">Search</button>
     </form>
     <ul class="navbar-nav mr-auto">
+
       <li class="nav-item active">
+         <?php if(!isset($_COOKIE['email'])){ ?>
         <a class="nav-link" href="signup.php">Log In</a>
+      <?php } ?>
       </li>
+  
        <li class="nav-item active">
         <a class="nav-link" href="contact.php">Contact us</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="#">Card</a>
+        <a class="nav-link" href="basket.php">Card</a>
       </li>     
     </ul>
   </div>

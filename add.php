@@ -24,6 +24,7 @@ author_id)
 VALUES
 ('$title','$price','$pictureUrl','$isbn','$genre','$description','$publisher','$author');";
 mysqli_query($conn, $sql);
+
 $conn->close();
 header('Location:/admin.php');
 }

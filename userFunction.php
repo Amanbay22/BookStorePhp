@@ -49,6 +49,7 @@ if (isset($_POST['signin'])) {
 		$cookie_email = $row['email'];
 		$cookie_name1 = 'password';
 		$cookie_password = $row['password'];
+		setcookie($auth, True, time() + (86400 * 30), "/");
 		setcookie($cookie_name, $cookie_email, time() + (86400 * 30), "/");
 		setcookie($cookie_name1, $cookie_password, time() + (86400 * 30), "/");
   		break;
@@ -60,7 +61,6 @@ header('Location:/index.php');
 }
 else{
 	header('Location:/signup.php?err=True');
-
 }
 }
  ?>

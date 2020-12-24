@@ -2,64 +2,62 @@
 
 include 'db.php';
 
-$sql = "SELECT DISTINCT book_id, title, price, full_name, picture_url, description, isbn, genre
+$sql = "SELECT book_id, title, price, full_name, picture_url, description, isbn, genre
 FROM books 
 INNER JOIN author
 ON books.author_id = author.author_id;
 ";
+$data = unserialize($_COOKIE['cart']);
+  
 
 $result = mysqli_query($conn, $sql);
 
-
 ?>
-	<!DOCTYPE html>
-	<html>
-	<head>
-		<title></title>
-	</head>
-	<link rel="stylesheet" type="text/css" href="css/main.css">
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Basket</title>
+</head>
+<link rel="stylesheet" type="text/css" href="css/main.css">
 
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
 	<body style="background-color: #E8E8E8	">
-	
-	<?php include 'navbar.php' ?>	
+<body>
+ <?php include 'navbar.php' ?>	
 
-		<div class="container-fluid text-white" style="height: 720px;">
-		
-			<div class="row">
-				<div class="col-md-5 mt-5 ml-5" style="height: 300px">
-					<h1 style="font-size: 64px;">This month's</h1>
-					<h1 style="font-size: 64px;"><span style="color: #fee802;">Bestseller</span></h1>
-					<div class="line mb-1"></div>
-					<p style=" font-size: 13px;  position: absolute;">
-					Watchmen is an American comic book maxiseries by the British creative team of writer Alan Moore, artist Dave Gibbons and colorist John Higgins. It was published by DC Comics in 1986 and 1987, and collected in a single volume edition in 1987. Watchmen originated from a story proposal Moore submitted to DC featuring superhero characters that the company had acquired from Charlton Comics. As Moore's proposed story would have left many of the characters unusable for future stories, managing editor Dick Giordano convinced Moore to create original characters instead.</p>
-				</div>
-				<div class="col-md-6">
-					<img src="images/product.png" alt="" class="figure-img img-fluid">
-				</div>
-			</div>
-		</div>
-		<div class="container mt-5 books">
-			<div class="book_list">
-			<div class="row text-center mb-5">
-				<?php if ($result->num_rows > 0) {
-
-  while($row = $result->fetch_assoc()) {
+ <div class="container mt-5 books">
    
+			<div class="book_list">
+        <?php if(!empty($data)){
+ ?>
+			<div class="row text-center mb-5">
+         
+        
+				<?php 
+          if ($result->num_rows > 0) {
+           while($row = $result->fetch_assoc()) {
+            foreach ($data as $v1) {
+              if($v1['book_id']==$row['book_id']){
    ?>			<div class="col-md-3 sm-6 mb-3">
-					<a type="button" data-toggle="modal" data-target="#<?php echo str_replace(' ', '', substr($row['title'],0,6))?>">
+					<a type="button" data-toggle="modal" data-target="#<?php echo substr($row['isbn'],0,7)?>">
 					<img src="<?php echo $row["picture_url"]?>" alt="" class="imgShadows" style="height: 230px;"></a>
 					<div class="d-flex justify-content-center price"><p><?php echo $row["price"] ?> KZT</p>
-						 <form action="cart.php" method="post">
-          				<input type="hidden" name="book_id" value="<?php echo $row['book_id']?>"> 
-          				<button type="submit" class="btn btn-secondary btn-sm" style="margin-left: 33px">CART</button>  
-          				</form>
-      					</div>
+                 <form action="order.php" method="post">
+                  <input type="hidden" name="book_id" value="<?php echo $row['book_id']?>"> 
+                  <button type="submit" class="btn btn-secondary btn-sm" style="margin-left: 33px">Order</button>  
+                  </form>      					</div>
 				</div>
-				<?php }
-}  ?>
+				<?php }}}}
+  ?>
 </div>
+ <?php } 
+ else {?>
+        <div class="row text-center pb-4">
+          <div class="col" style="font-size: 24px;">No books</div>
+        </div>
+      <?php }  ?>
 			</div>
+ 
 
 		</div>
 <?php
@@ -70,7 +68,7 @@ $result = mysqli_query($conn, $sql);
  
    ?>
 		<!-- Modal -->
-<div class="modal fade" id="<?php echo str_replace(' ', '', substr($row['title'],0,6))?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+<div class="modal fade" id="<?php echo substr($row['isbn'],0,7)?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-lg "  role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -103,11 +101,10 @@ $result = mysqli_query($conn, $sql);
   </div>
 
 </div>
-
   <?php }
-}  $conn->close();?>
-		<script type="text/javascript" src="js/script.js"></script>
+}  $conn->close();?>	
+
 	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
-	</body>
-	</html>
+</body>
+</html>
